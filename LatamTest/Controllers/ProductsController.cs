@@ -15,24 +15,24 @@ namespace LatamTest.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        private readonly ApplicationMemoryContext _memoryContext;
+        private readonly UnitOfWork _unitOfWork;
 
         public ProductsController()
         {
-            _dbContext = new ApplicationDbContext();
-            _memoryContext = ApplicationMemoryContext.GetInstance();
+            _unitOfWork = new UnitOfWork(new ApplicationContext());
         }
 
         // GET: Products
+        [HttpGet]
         public async Task<ActionResult> Index()
         {
-            var unitOfWork = new UnitOfWork();
-            return View(await db.Products.ToListAsync());
+            ViewBag.PersistenceMode = _unitOfWork.ConfigurationRepository.IsMemoryPersistence() ? "Memory Persistence" : "Database Persistence";
+            var products = await _unitOfWork.ProductRepository.GetAllAsync().ConfigureAwait(false);
+            return View(products);
         }
 
         // GET: Products/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
@@ -43,14 +43,12 @@ namespace LatamTest.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Title,Number,Price")] Product product)
         {
-            if (ModelState.IsValid)
-            {
-                db.Products.Add(product);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            if (!ModelState.IsValid) return View(product);
 
-            return View(product);
+            _unitOfWork.ProductRepository.Add(product);
+            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -16,6 +16,17 @@ namespace LatamTest.Repository
             _memoryContext = context;
         }
 
-        public bool IsMemoryPersistance() => _memoryContext.Configuration.IsMemoryPersistance;
+        public bool IsMemoryPersistence() => _memoryContext.Configuration.IsMemoryPersistence;
+
+        public void TooglePersistenceMode()
+        {
+            if (_memoryContext.Configuration.IsMemoryPersistence)
+            {
+                _memoryContext.Configuration.IsMemoryPersistence = false;
+                return;
+            }
+
+            _memoryContext.Configuration.IsMemoryPersistence = true;
+        }
     }
 }

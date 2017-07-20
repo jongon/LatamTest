@@ -7,13 +7,13 @@ namespace LatamTest.Models
 {
     public class Configuration
     {
-        public static bool MemoryPersistance = false;
+        public static bool MemoryPersistence = false;
 
-        public bool IsMemoryPersistance
+        public bool IsMemoryPersistence
         {
-            get => MemoryPersistance;
+            get => MemoryPersistence;
 
-            set => MemoryPersistance = value;
+            set => MemoryPersistence = value;
         }
     }
 }
