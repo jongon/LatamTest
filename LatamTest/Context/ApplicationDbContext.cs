@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace LatamTest.Configuration
+namespace LatamTest.Context
 {
     public class ApplicationDbContext : DbContext
     {
