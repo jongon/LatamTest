@@ -8,10 +8,32 @@ namespace LatamTest.Repository
 {
     public class UnitOfWork
     {
-        public static bool IsMemoryStorage = false;
-
         private readonly ApplicationDbContext _dbContext;
 
-        public int MyProperty { get; set; }
+        public ProductRepository ProductRepository { get; set; }
+
+        public ConfigurationRepository ConfigurationRepository { get; set; }
+
+        public UnitOfWork(ApplicationDbContext context)
+        {
+            _dbContext = context;
+            ProductRepository = new ProductRepository(_dbContext);
+        }
+
+        public UnitOfWork(ApplicationMemoryContext context)
+        {
+            ProductRepository = new ProductRepository(context);
+            ConfigurationRepository = new ConfigurationRepository(context);
+        }
+
+        public void SaveChanges()
+        {
+            _dbContext?.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _dbContext?.Dispose();
+        }
     }
 }

@@ -8,6 +8,17 @@ namespace LatamTest.Context
 {
     public class ApplicationMemoryContext
     {
-        public static ICollection<Product> Products = new List<Product>();
+        private ApplicationMemoryContext() { }
+
+        private static readonly ApplicationMemoryContext Instance = new ApplicationMemoryContext();
+
+        public static ApplicationMemoryContext GetInstance()
+        {
+            return Instance;
+        }
+
+        public ICollection<Product> Products = new List<Product>();
+
+        public Configuration Configuration = new Configuration();
     }
 }

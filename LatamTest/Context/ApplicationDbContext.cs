@@ -11,7 +11,6 @@ namespace LatamTest.Context
     {
         public ApplicationDbContext() : base("LatamConnection")
         {
-            //Configuration.LazyLoadingEnabled = false;
         }
 
         public static ApplicationDbContext Create()
